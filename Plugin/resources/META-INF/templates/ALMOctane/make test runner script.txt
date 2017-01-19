@@ -1,0 +1,103 @@
+'##########################
+'
+' Visual Basic Script : Run the ALM/QC Test Sets
+'
+'##########################
+Dim objTDCon, objTreeMgr, objTestSetFolder, objTestSetList
+Dim objTestSet, objScheduler, objExecStatus, objTestExecStatus
+Dim strTestSetFolderPath, strTestSetName, strReportStatus, intCounter
+
+'Declare the Test Folder, Test and Host you wish to run the test on
+
+'Enter the URL to QC server
+strQCURL = "http://almdemo/qcbin"
+
+'Enter Domain to use on QC server
+strQCDomain = "DEFAULT"
+
+'Enter Project Name
+strQCProject = "ALM_Demo_Project"
+
+'Enter the User name to log in and run test
+strQCUser = "alex_Tester"
+
+'Enter user password for the account above.
+strQCPassword = "password"
+
+'Enter the path to the Test set folder
+strTestSetFolderPath = "Root\Auto Test"
+
+'Enter the test set to be run
+strTestSetName = "Test One"
+
+'Enter the target machine to run test
+strHostName="ALMDEMO"
+
+'Connect to Quality Center and login.
+Set objTDCon = CreateObject("TDApiOle80.TDConnection")
+
+'Make connection to QC server
+objTDCon.InitConnectionEx strQCURL
+'Login in to QC server
+objTDCon.Login strQCUser, strQCPassword
+'select Domain and project
+objTDCon.Connect strQCDomain, strQCProject
+
+'Select the test to run
+Set objTreeMgr = objTDCon.TestSetTreeManager
+Set objTestSetFolder = objTreeMgr.NodeByPath(strTestSetFolderPath)
+Set objTestSetList = objTestSetFolder.FindTestSets (strTestSetName)
+intCounter = 1
+
+'find test set object
+While intCounter <= objTestSetList.Count
+  Set objTestSet = objTestSetList.Item( intCounter)
+  If objTestSet.Name = strTestSetName Then
+    intCounter = objTestSetList.Count + 1
+  End If
+  intCounter = intCounter + 1
+Wend
+
+'Set the Host name to run on and run the test.
+set objScheduler = objTestSet.StartExecution ("")
+' Set this empty to run local for automation run agent
+objScheduler.TdHostName = strHostName
+objScheduler.Run
+
+'Wait for the test to run to completion.
+Set objExecStatus = objScheduler.ExecutionStatus
+While objExecStatus.Finished = False
+  objExecStatus.RefreshExecStatusInfo "all", True
+If objExecStatus.Finished = False Then
+  WScript.sleep 5
+End If
+Wend
+
+'Below is example to determine if execution failed for error reporting.
+strReportStatus = "Passed"
+For intCounter = 1 To objExecStatus.Count
+  Set objTestExecStatus = objExecStatus.Item(intCounter )
+  'msgbox intCounter & " " & objTestExecStatus.Status
+  If Not ( Instr (1, Ucase( objTestExecStatus.Status ), Ucase ( "Passed" ) ) > 0 )
+Then
+    strReportStatus = "Failed"
+    testsPassed = 0
+    Exit For
+  Else
+    testsPassed = 1
+  End If
+Next
+
+objTDCon.DisconnectProject
+
+If (Err.Number > 0) Then
+  'MsgBox "Run Time Error. Unable to complete the test execution !! " &
+Err.Description
+  WScript.Quit 1
+ElseIf testsPassed >0 Then
+  'Msgbox "Tests Passed !!"
+  WScript.Quit 0
+Else
+  'Msgbox "Tests Failed !!"
+  WScript.Quit 1
+End If

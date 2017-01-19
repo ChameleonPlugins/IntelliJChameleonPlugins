@@ -1,0 +1,30 @@
+Dim appExcel, objWorkBook, objSheet, columncount, rowcount,
+
+'Create the application object for excel
+Set appExcel = CreateObject("Excel.Application")
+
+'Set the workbook object by opening
+Set objWorkBook = appExcel.Workbooks.open("c:\Smoke_Test\SmokeTest.xls")
+
+'Set the Worksheet object
+Set objSheet = appExcel.Sheets("Global")
+
+'Get the count for total used columns
+columncount = objSheet.usedrange.columns.count
+
+'Get the count for total used rows
+rowcount = objSheet.usedrange.rows.count
+
+'Assign the data to search for
+Find_Details="Report"
+
+'Iterate the loop through each cell to find out required data
+For a= 1 to rowcount
+  For b = 1 to columncount
+    fieldvalue =objSheet.cells(a,b)
+    If  cstr(fieldvalue)= Cstr(Find_Details) Then
+      msgbox cstr(fieldvalue)
+    Exit For
+  End If
+  Next
+Next

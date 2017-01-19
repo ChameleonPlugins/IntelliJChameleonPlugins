@@ -1,0 +1,9 @@
+' Inserted BitMap Checkpoint
+imgchkpoint = Browser("Math Calculator").Page("Math Calculator").Image("French").Check CheckPoint("French")
+
+If imgchkpoint Then
+  print "Checkpoint Passed"
+Else
+  Print "Checkpoint Failed"
+End if
+

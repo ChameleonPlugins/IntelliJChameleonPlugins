@@ -1,0 +1,7 @@
+' For more information about Chameleon, including video demos:
+'
+'        https://hpedia.osp.hpe.com/wiki/Chameleon
+'
+'                        or email
+'
+'                   Chameleon@hpe.com

@@ -1,0 +1,9 @@
+' Inserted Standard Checkpoint
+Status = Browser("Math Calculator").Page("Math Calculator").Link("Numbers").Check CheckPoint("Numbers")
+
+If Status Then
+  print "Checkpoint Passed"
+Else
+  Print "Checkpoint Failed"
+End if
+

@@ -1,0 +1,36 @@
+'Call to the function for sending the mail on mail id 'abc@abc.com'
+Call SendMail("abc@abc.com","Hi","Hi","")
+
+' THis function will create an email and send it using outlook
+
+Function SendMail(SendTo, Subject, Body, Attachment)
+
+'CreateObject method to create an Outlook Application object
+Set ol=CreateObject("Outlook.Application")
+
+'Create a new outlook mail object
+Set Mail=ol.CreateItem(0)
+
+'Add the email address to the recipient list of the message
+Mail.to=SendTo
+
+'Add the subject of the message
+Mail.Subject=Subject
+
+'Add the body of the mail message
+Mail.Body=Body
+
+'Add the attachment to the mail message
+If (Attachment <> "") Then
+  Mail.Attachments.Add(Attachment)
+End If
+
+'Send the mail message
+Mail.Send
+
+'Free up the memory
+ol.Quit
+Set Mail = Nothing
+Set ol = Nothing
+
+End Function

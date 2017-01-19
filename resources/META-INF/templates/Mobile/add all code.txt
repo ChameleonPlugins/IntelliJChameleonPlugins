@@ -1,0 +1,78 @@
+
+        //// add all code
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<String> nouns = new ArrayList<String>();   // Thing (Noun)
+                List<String> verbs = new ArrayList<String>();   // Action (Verb)
+                List<String> names = new ArrayList<String>();   // Name
+                List<String> places = new ArrayList<String>();  // Place
+//                List<String> adjectives = new ArrayList<String>();  // Description (Adjective)
+//                List<String> adverbs = new ArrayList<String>();  // Description (Adjective)
+
+                LinearLayout ll = (LinearLayout)findViewById(R.id.story);
+                int childcount = ll.getChildCount();
+                for (int i=0; i < childcount; i+=2){
+                    View v = ll.getChildAt(i);
+                    if ( v instanceof AppCompatTextView) {
+                        AppCompatTextView textView = (AppCompatTextView)v;
+                        String field = textView.getText().toString();
+                        View v2 = ll.getChildAt(i+1);
+                        if ( v2 instanceof AppCompatEditText) {
+                            AppCompatEditText editView = (AppCompatEditText)v2;
+                            String text = editView.getText().toString();
+                            if (field.contains("Noun")) {
+                                if (!text.isEmpty()) {
+                                    nouns.add(text);
+                                }
+                            }
+                            if (field.contains("Verb")) {
+                                if (!text.isEmpty()) {
+                                    verbs.add(text);
+                                }
+                            }
+                            if (field.contains("Name")) {
+                                if (!text.isEmpty()) {
+                                    names.add(text);
+                                }
+                            }
+                            if (field.contains("Place")) {
+                                if (!text.isEmpty()) {
+                                    places.add(text);
+                                }
+                            }
+                        }
+                    }
+                    String f = v.toString();
+                    Log.d("debug", "f="+f);
+                }
+
+                // Add additional entries
+                names.add("Bob");
+                places.add("the moon");
+                places.add("the desert");
+                nouns.add("box");
+                nouns.add("horse");
+                nouns.add("table");
+                nouns.add("sandwich");
+                verbs.add("eat");
+
+                String storyText = "Once upon a time, " + names.get(0) + " decided to" +
+                        " leave " + places.get(0) + " and go to " + places.get(1) + "." +
+                        "  "+names.get(0) + " got on a " + nouns.get(0) + " and started to " +
+                        verbs.get(0) + " really fast.  Before " + names.get(0) + " got there, " +
+                        names.get(0) + " found a lost " + nouns.get(1) + ".  " + names.get(0) +
+                        " took the " + nouns.get(1) + " and walked down the street, looking for" +
+                        " its owner.  Suddenly an evil " + nouns.get(2) + " appeared and threw a " +
+                        nouns.get(3) + " at " + names.get(0) + ".  " + names.get(0) + " quickly " +
+                        "ducked, grabbed a rope, and tied up the evil " + nouns.get(2) + ".  " +
+                        names.get(0) + " eventually found the " + nouns.get(1) + "'s owner, and " +
+                        "eventually arrived at " + places.get(1) +
+                        ", and lived happily ever after. THE END.";
+
+
+                TextView storyTextView = (TextView)findViewById(R.id.storyTextView);
+                storyTextView.setText(storyText);
+            }
+        });

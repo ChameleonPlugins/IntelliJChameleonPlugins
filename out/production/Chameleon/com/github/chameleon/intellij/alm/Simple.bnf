@@ -1,0 +1,20 @@
+{
+  parserClass="com.github.chameleon.intellij.alm.parser.SimpleParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Simple"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.simpleplugin.psi"
+  psiImplPackage="com.simpleplugin.psi.impl"
+
+  elementTypeHolderClass="com.github.chameleon.intellij.alm.psi.SimpleTypes"
+  elementTypeClass="com.github.chameleon.intellij.alm.psi.SimpleElementType"
+  tokenTypeClass="com.github.chameleon.intellij.alm.psi.SimpleTokenType"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY
